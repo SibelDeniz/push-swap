@@ -72,6 +72,14 @@ int lis_greedy_sort(t_node **a, t_node **b)
     if (!a || !*a || is_sorted(*a))
         return (1);
     size = stack_size(*a);
+    if (size == 2)
+        return (sa(a), write(1, "sa\n", 3), 1);
+    if (size == 3)
+        return (sort_3(a), 1);
+    if (size == 4)
+        return (sort_4(a, b), 1);
+    if (size == 5)
+        return (sort_5(a, b), 1);
     keep = lis_keep_array(*a);
     if (!keep)
         return (0);

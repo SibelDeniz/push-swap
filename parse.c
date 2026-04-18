@@ -10,13 +10,6 @@ static int is_digit(char c)
     return (c >= '0' && c <= '9');
 }
 
-static void parse_error(t_node **stack)
-{
-    free_stack(stack);
-    write(2, "Error\n", 6);
-    exit(EXIT_FAILURE);
-}
-
 static long parse_number(const char **s, t_node **stack)
 {
     long sign;
@@ -31,12 +24,12 @@ static long parse_number(const char **s, t_node **stack)
         (*s)++;
     }
     if (!is_digit(**s))
-        parse_error(stack);
+        (free_stack(stack), write(2, "Error\n", 6), exit(EXIT_FAILURE));
     while (is_digit(**s))
     {
         nb = nb * 10 + (**s - '0');
         if ((sign == 1 && nb > INT_MAX) || (sign == -1 && -nb < INT_MIN))
-            parse_error(stack);
+            (free_stack(stack), write(2, "Error\n", 6), exit(EXIT_FAILURE));
         (*s)++;
     }
     return (nb * sign);
@@ -54,7 +47,9 @@ static void parse_arg(t_node **stack, const char *s)
             return;
         nb = parse_number(&s, stack);
         if (*s && !is_space(*s))
-            parse_error(stack);
+            (free_stack(stack), write(2, "Error\n", 6), exit(EXIT_FAILURE));
+        if (has_duplicate(*stack, (int)nb))
+            (free_stack(stack), write(2, "Error\n", 6), exit(EXIT_FAILURE));
         add_back(stack, (int)nb);
     }
 }

@@ -23,18 +23,6 @@ void add_back(t_node **stack, int nb)
     new_node->prev = current;
 }
 
-void afficher_stack(t_node *stack)
-{
-    t_node *current;
-
-    current = stack;
-    while (current)
-    {
-        printf("%d ", current->nb);
-        current = current->next;
-    }
-    printf("\n");
-}
 
 int stack_size(t_node *stack)
 {
@@ -47,6 +35,17 @@ int stack_size(t_node *stack)
         stack = stack->next;
     }
     return (size);
+}
+
+int has_duplicate(t_node *stack, int nb)
+{
+    while (stack)
+    {
+        if (stack->nb == nb)
+            return (1);
+        stack = stack->next;
+    }
+    return (0);
 }
 
 int is_sorted(t_node *stack)

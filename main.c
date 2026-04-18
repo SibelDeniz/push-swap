@@ -7,6 +7,11 @@ int main(int argc, char **argv)
     if (argc < 2)
         return (0);
     parse(&stack_a, argc, argv);
+    if (!stack_a)
+    {
+        write(2, "Error\n", 6);
+        return (1);
+    }
     if (!assign_indexes(stack_a))
     {
         free_stack(&stack_a);
