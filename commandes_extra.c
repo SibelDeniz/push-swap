@@ -55,3 +55,18 @@ void rrb(t_node **stack_b)
     (*stack_b)->prev = last;
     *stack_b = last;
 }
+
+void push_non_lis(t_node **a, t_node **b, int *keep, int size)
+{
+    int i;
+
+    i = 0;
+    while (i < size)
+    {
+        if (keep[(*a)->nb])
+            ra(a), write(1, "ra\n", 3);
+        else
+            pb(a, b), write(1, "pb\n", 3);
+        i++;
+    }
+}

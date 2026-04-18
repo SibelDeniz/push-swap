@@ -32,46 +32,22 @@ static void rotate_b_to_cost(t_node **b, int cost)
     }
 }
 
-static void push_non_lis(t_node **a, t_node **b, int *keep, int size)
+static void greedy_loop(t_node **a, t_node **b)
 {
-    int i;
-
-    i = 0;
-    while (i < size)
-    {
-        if (keep[(*a)->nb])
-            ra(a), write(1, "ra\n", 3);
-        else
-            pb(a, b), write(1, "pb\n", 3);
-        i++;
-    }
-}
-
-static void finish_stack_a(t_node **a)
-{
-    int pos;
-    int size;
-
-    size = stack_size(*a);
-    pos = find_min_pos(*a);
-    if (pos <= size / 2)
-        while (pos--)
-            ra(a), write(1, "ra\n", 3);
-    else
-        while (pos++ < size)
-            rra(a), write(1, "rra\n", 4);
-}
-
-int lis_greedy_sort(t_node **a, t_node **b)
-{
-    int *keep;
-    int size;
     int cost_a;
     int cost_b;
 
-    if (!a || !*a || is_sorted(*a))
-        return (1);
-    size = stack_size(*a);
+    while (*b)
+    {
+        find_best_move(*a, *b, &cost_a, &cost_b);
+        rotate_a_to_cost(a, cost_a);
+        rotate_b_to_cost(b, cost_b);
+        pa(a, b), write(1, "pa\n", 3);
+    }
+}
+
+static int small_dispatch(t_node **a, t_node **b, int size)
+{
     if (size == 2)
         return (sa(a), write(1, "sa\n", 3), 1);
     if (size == 3)
@@ -80,17 +56,24 @@ int lis_greedy_sort(t_node **a, t_node **b)
         return (sort_4(a, b), 1);
     if (size == 5)
         return (sort_5(a, b), 1);
+    return (0);
+}
+
+int lis_greedy_sort(t_node **a, t_node **b)
+{
+    int *keep;
+    int size;
+
+    if (!a || !*a || is_sorted(*a))
+        return (1);
+    size = stack_size(*a);
+    if (small_dispatch(a, b, size))
+        return (1);
     keep = lis_keep_array(*a);
     if (!keep)
         return (0);
     push_non_lis(a, b, keep, size);
-    while (*b)
-    {
-        find_best_move(*a, *b, &cost_a, &cost_b);
-        rotate_a_to_cost(a, cost_a);
-        rotate_b_to_cost(b, cost_b);
-        pa(a, b), write(1, "pa\n", 3);
-    }
+    greedy_loop(a, b);
     finish_stack_a(a);
     free(keep);
     return (1);

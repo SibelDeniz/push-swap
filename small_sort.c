@@ -59,3 +59,18 @@ void	sort_5(t_node **a, t_node **b)
 	pa(a, b);
 	write(1, "pa\n", 3);
 }
+
+void	finish_stack_a(t_node **a)
+{
+	int	pos;
+	int	size;
+
+	size = stack_size(*a);
+	pos = find_min_pos(*a);
+	if (pos <= size / 2)
+		while (pos--)
+			ra(a), write(1, "ra\n", 3);
+	else
+		while (pos++ < size)
+			rra(a), write(1, "rra\n", 4);
+}
